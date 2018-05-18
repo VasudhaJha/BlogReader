@@ -18,19 +18,56 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        navigationItem.leftBarButtonItem = editButtonItem
-
-        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
-        navigationItem.rightBarButtonItem = addButton
-        if let split = splitViewController {
-            let controllers = split.viewControllers
-            detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
+        let url = BloggerAPI.bloggerUrl()
+        let request = URLRequest(url: url)
+        let task = URLSession.shared.dataTask(with: request){
+            (data, response, error) in
+            if let data = data {
+                let items = BloggerAPI.blogDetails(fromJSONData: data)
+                
+                let context = self.fetchedResultsController.managedObjectContext
+                let request = NSFetchRequest<Event>(entityName: "Event")
+                do {
+                    let results = try context.fetch(request)
+                    for result in results {
+                        context.delete(result)
+                        do {
+                            try context.save()
+                        } catch {
+                            print("Specific delete failed")
+                        }
+                    }
+                } catch {
+                    print("Delete failed")
+                }
+                
+                
+            
+                // If appropriate, configure the new managed object.
+                
+                for item:[AnyHashable : Any] in items {
+                    let newEvent = Event(context: context)
+                    
+                    newEvent.timestamp = Date()
+                    newEvent.setValue(item["title"] as? String, forKey: "title")
+                    newEvent.setValue(item["content"] as? String, forKey: "content")
+                    newEvent.setValue(item["published"] as? String, forKey: "published")
+                }
+                // Save the context.
+                do {
+                    try context.save()
+                } catch {
+                
+                    print("error")
+                }
+                
+            }
+            OperationQueue.main.addOperation {
+                self.tableView.reloadData()
+            }
+            
         }
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        clearsSelectionOnViewWillAppear = splitViewController!.isCollapsed
-        super.viewWillAppear(animated)
+        task.resume()
     }
 
     override func didReceiveMemoryWarning() {
@@ -91,27 +128,11 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
-        return true
-    }
-
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            let context = fetchedResultsController.managedObjectContext
-            context.delete(fetchedResultsController.object(at: indexPath))
-                
-            do {
-                try context.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-            }
-        }
+        return false
     }
 
     func configureCell(_ cell: UITableViewCell, withEvent event: Event) {
-        cell.textLabel!.text = event.timestamp!.description
+        cell.textLabel!.text = event.value(forKey: "title") as? String
     }
 
     // MARK: - Fetched results controller
@@ -127,7 +148,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         fetchRequest.fetchBatchSize = 20
         
         // Edit the sort key as appropriate.
-        let sortDescriptor = NSSortDescriptor(key: "timestamp", ascending: false)
+        let sortDescriptor = NSSortDescriptor(key: "published", ascending: false)
         
         fetchRequest.sortDescriptors = [sortDescriptor]
         

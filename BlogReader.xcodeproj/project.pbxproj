@@ -14,6 +14,7 @@
 		A2BDBA3E20AC52C00068DD76 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A2BDBA3C20AC52C00068DD76 /* Main.storyboard */; };
 		A2BDBA4020AC52C00068DD76 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2BDBA3F20AC52C00068DD76 /* Assets.xcassets */; };
 		A2BDBA4320AC52C00068DD76 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A2BDBA4120AC52C00068DD76 /* LaunchScreen.storyboard */; };
+		A2BDBA4B20AD4E130068DD76 /* BloggerAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2BDBA4A20AD4E130068DD76 /* BloggerAPI.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		A2BDBA3F20AC52C00068DD76 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A2BDBA4220AC52C00068DD76 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A2BDBA4420AC52C00068DD76 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A2BDBA4A20AD4E130068DD76 /* BloggerAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BloggerAPI.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +68,7 @@
 				A2BDBA4120AC52C00068DD76 /* LaunchScreen.storyboard */,
 				A2BDBA4420AC52C00068DD76 /* Info.plist */,
 				A2BDBA3520AC52C00068DD76 /* BlogReader.xcdatamodeld */,
+				A2BDBA4A20AD4E130068DD76 /* BloggerAPI.swift */,
 			);
 			path = BlogReader;
 			sourceTree = "<group>";
@@ -143,6 +146,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A2BDBA3720AC52C00068DD76 /* BlogReader.xcdatamodeld in Sources */,
+				A2BDBA4B20AD4E130068DD76 /* BloggerAPI.swift in Sources */,
 				A2BDBA3420AC52C00068DD76 /* AppDelegate.swift in Sources */,
 				A2BDBA3920AC52C00068DD76 /* MasterViewController.swift in Sources */,
 				A2BDBA3B20AC52C00068DD76 /* DetailViewController.swift in Sources */,
